@@ -75,7 +75,10 @@ class Othello {
   
   // Initializes the board with start configuration of discs (as per project specs)
   initializeBoard() {
-  	// TO DO: complete this method
+	  this.board[this.size/2-1][this.size/2-1] = 'B';
+	  this.board[this.size/2-1][this.size/2]= 'W';
+	  this.board[this.size/2][this.size/2]= "B";
+	  this.board[this.size/2][this.size/2-1]= 'W';
   	
   	
   }
@@ -88,8 +91,44 @@ class Othello {
 	// Returns true if placing the specified disc at row,col is valid; else returns false
 	isValidMoveForDisc(row, col, disc) {
 		
-		// TO DO: add your code below
-		
+		let tempRow;
+		let tempCol;
+		let opponent ='W'
+		if (this.disc == 'W')
+		opponent = 'B';
+
+		for(let i=-1; i<=1; i++){
+			for(let j=-1; j<=1; j++){
+				let flag=false;
+				if(i==0 && j==0)
+				continue;
+				if(row+i>=this.size || row+i<0 || j+col>=this.size || j+col<0)
+					continue;
+				if(this.board[row+i][col +j] == opponent) {
+					tempRow =row +i;
+					tempCol = col+j;
+			}
+			else continue;
+
+				while(1){
+					tempRow += i;
+					tempCol +=j;
+					// console.log(tempRow);
+					// console.log(tempCol);
+					if(tempCol>=this.size || tempRow<0 || tempCol>=this.size || tempCol<0){
+						break;
+					}
+					if(this.board[tempRow][tempCol] == this.disc)
+					return true;
+
+					if(this.board[tempRow][tempCol] == '0')
+					break;
+
+
+
+				}
+			}
+		}
 		
 		// DO NOT DELETE!!
 		// return false to indicate that move is not valid, if control reaches this point
@@ -105,8 +144,64 @@ class Othello {
 		// place the current player's disc at row,col
 		this.board[row][col] = this.disc;
 		
-		// TO DO: add your code below
-		
+		let tempRow;
+		let tempCol;
+		let opponent ='W'
+		if (this.disc == 'W')
+		opponent = 'B';
+
+		for(let i=-1; i<=1; i++){
+			for(let j=-1; j<=1; j++){
+				let flag=true;
+				if(i==0 && j==0)
+				continue;
+				if(row+i>=this.size || row+i<0 || j+col>=this.size || j+col<0)
+					continue;
+				if(this.board[row+i][col +j] == opponent) {
+					tempRow =row +i;
+					tempCol = col+j;
+			}
+			else continue;
+
+				while(flag){
+					tempRow += i;
+					tempCol +=j;
+					// console.log(tempRow);
+					// console.log(tempCol);
+					if(tempCol>=this.size || tempRow<0 || tempCol>=this.size || tempCol<0){
+						flag=0;
+						break;
+				}
+						
+					if(this.board[tempRow][tempCol] == '0')
+					flag=0;
+
+					if(this.board[tempRow][tempCol] == this.disc){
+					i=-i;
+					j=-j;
+						while(flag){
+						console.log("i=" + i);
+						console.log(j);
+						console.log(tempRow);
+						console.log(tempCol);
+					tempRow +=i;
+					tempCol +=j;
+
+					if(this.board[tempRow][tempCol] == this.disc){
+					i=-i;
+					j=-j;
+					flag=0
+				}
+					this.board[tempRow][tempCol]=this.disc;
+					}
+					}
+
+
+
+
+				}
+			}
+		}
 		
 		
 		// DO NOT DELETE!!
@@ -138,7 +233,12 @@ class Othello {
 	// Returns true if a valid move for the specified disc is available; else returns false
 	isValidMoveAvailableForDisc(disc) {
 		
-		// TO DO: add your code below
+		for(let i=0; i<this.size;i++){
+			for(let j=0; j<this.size; j++){
+				if(this.isValidMoveForDisc(i,j,disc))
+				return true;
+			}
+		}
 		
 		
 		// DO NOT DELETE!!
@@ -149,7 +249,12 @@ class Othello {
 	// Returns true if the board is fully occupied with discs; else returns false
 	isBoardFull() {
 		
-		// TO DO: add your code below
+		for(let i=0; i<this.size;i++){
+			for(let j=0; j<this.size; j++){
+				if(this.board[i][j] == '0')
+				return false;
+			}
+		}
 		
 		
 		// DO NOT DELETE!!
@@ -168,7 +273,20 @@ class Othello {
 	checkWinner() {
 		let blackCount = 0, whiteCount = 0;
 
-		// TO DO: replace the code below with your code
+		for(let i=0; i<this.size; i++) {
+			for(let j=0; j<this.size; j++) {
+				if(this.board[i][j] == 'B')
+					blackCount += 1;
+				if(this.board[i][j] == 'W')
+					whiteCount += 1;
+			}
+		}
+		if(blackCount > whiteCount)
+		return BLACK;
+		if(whiteCount > blackCount)
+		return WHITE;
+		
+
 
 		return Othello.TIE;		
 	}
